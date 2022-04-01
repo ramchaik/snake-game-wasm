@@ -2,7 +2,11 @@
 ------------
     WAT
 ------------
+Memory:
+    1. Memory can either be created in WebAssembly and exported to JS.
+    2. Or it can be created in JS and is passed to WebAssembly.
 
+Eg of 1:
 (module
     (import "console" "log" (func $log))
     (import "console" "error" (func $error))
@@ -18,9 +22,35 @@
     (export "mem" (memory $mem))
     (export "sum" (func $sum))
 )
+
+NOTES:
+    (memory $mem 1)
+    1 -> 1 page of memory, page has around 64kb
+
+Eg of 2:
+
+(module
+    (import "console" "log" (func $log))
+    (import "console" "error" (func $error))
+    (memory (import "js" "mem") 1)
+    (data (i32.const 0) "Hi")
+    (func $sum (param $x i32) (param $y i32) (result i32)
+        call $log
+        call $error
+        local.get $x
+        local.get $y
+        i32.add
+    )
+    (export "sum" (func $sum))
+)
+
 */
 async function init() {
+    const memory = new WebAssembly.Memory({ initial: 1 });
     const importObject = {
+        js: {
+            mem: memory,
+        },
         console: {
             log: () => {
                 console.log('Just logging something!');
@@ -35,13 +65,9 @@ async function init() {
     const buffer = await response.arrayBuffer();
     const wasm = await WebAssembly.instantiate(buffer, importObject);
 
-    const {sum, mem} = wasm.instance.exports;
-
-    const uint8Array = new Uint8Array(mem.buffer, 0, 2);
+    const uint8Array = new Uint8Array(memory.buffer, 0, 2);
     const text = new TextDecoder("utf-8").decode(uint8Array);
-    const result = sum(100, 200);
 
-    console.log('sum: ', result);
     console.log('text: ', text);
 }
 
