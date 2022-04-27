@@ -22,5 +22,23 @@ init().then((_) => {
     }
     ctx.stroke();
   }
+  
+  function drawSnake() {
+    const snakeIdx = world.snake_head();
+    
+    const row = snakeIdx % worldWidth;
+    const col = Math.floor(snakeIdx / worldWidth);
+    
+    ctx.beginPath();
+    ctx.fillRect(
+      col * CELL_SIZE,
+      row * CELL_SIZE,
+      CELL_SIZE,
+      CELL_SIZE,
+    );
+    ctx.stroke();
+  }
+  
   drawWorld();
+  drawSnake();
 });
