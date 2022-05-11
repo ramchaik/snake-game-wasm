@@ -17,17 +17,17 @@ init().then((_) => {
       ctx.lineTo(x * CELL_SIZE, worldWidth * CELL_SIZE);
     }
     for (let y = 0; y <= worldWidth; ++y) {
-      ctx.moveTo(0 ,y * CELL_SIZE);
+      ctx.moveTo(0, y * CELL_SIZE);
       ctx.lineTo(worldWidth * CELL_SIZE, y * CELL_SIZE);
     }
     ctx.stroke();
   }
   
   function drawSnake() {
-    const snakeIdx = world.snake_head();
+    const snakeIdx = world.snake_head_idx();
     
-    const row = snakeIdx % worldWidth;
-    const col = Math.floor(snakeIdx / worldWidth);
+    const col = snakeIdx % worldWidth;
+    const row = Math.floor(snakeIdx / worldWidth);
     
     ctx.beginPath();
     ctx.fillRect(
@@ -39,6 +39,10 @@ init().then((_) => {
     ctx.stroke();
   }
   
-  drawWorld();
-  drawSnake();
+  setInterval(() => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawWorld();
+    drawSnake();
+    world.update();
+  }, 100);
 });
