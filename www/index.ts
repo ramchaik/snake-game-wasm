@@ -3,7 +3,7 @@ import init, {World} from "snake-game-wasm";
 init().then((_) => {
   const CELL_SIZE = 20;
   const world = World.new();
-  const canvas = document.getElementById("snake-canvas");
+  const canvas = <HTMLCanvasElement> document.getElementById("snake-canvas");
   const worldWidth = world.width();
   const ctx = canvas.getContext("2d");
 
