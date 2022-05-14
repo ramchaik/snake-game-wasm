@@ -2,7 +2,10 @@ import init, {World} from "snake-game-wasm";
 
 init().then((_) => {
   const CELL_SIZE = 20;
-  const world = World.new();
+  const WORLD_WIDTH = 8;
+  const snakeSpawnIdx = Date.now() % (WORLD_WIDTH * WORLD_WIDTH);
+  
+  const world = World.new(WORLD_WIDTH, snakeSpawnIdx);
   const canvas = <HTMLCanvasElement> document.getElementById("snake-canvas");
   const worldWidth = world.width();
   const ctx = canvas.getContext("2d");
@@ -45,13 +48,14 @@ init().then((_) => {
   }
 
   function update() {
+    const fps = 10;
     setTimeout(() => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       world.update();
       paint();
       // callback invoked before the next repaint 
       requestAnimationFrame(update)
-    }, 100);
+    }, 1000 / fps);
   }
   
   paint();

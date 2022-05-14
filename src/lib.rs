@@ -27,12 +27,11 @@ pub struct World {
 
 #[wasm_bindgen]
 impl World {
-    pub fn new() -> World {
-        let width = 8;
+    pub fn new(width: usize, snake_index: usize) -> World {
         World {
             width,
             size: width * width,
-            snake: Snake::new(10)
+            snake: Snake::new(snake_index)
         }
     } 
 
@@ -48,12 +47,6 @@ impl World {
        let snake_idx = self.snake_head_idx();
        self.snake.body[0].0 = (snake_idx + 1) % self.size;
    }
-}
-
-impl Default for World {
-   fn default() -> Self {
-       Self::new()
-   } 
 }
 
 // Packing to wasm
