@@ -23,7 +23,7 @@ impl Snake {
     pub fn new(spawn_index: usize) -> Snake {
         Snake {
             body: vec![SnakeCell(spawn_index)],
-            direction: Direction::Left,
+            direction: Direction::Right,
         }
     }
 }
@@ -55,13 +55,16 @@ impl World {
 
     pub fn update(&mut self) {
         let snake_idx = self.snake_head_idx();
+        let row = snake_idx / self.width;
 
         if self.snake.direction == Direction::Right {
-            self.snake.body[0].0 = (snake_idx + 1) % self.size;
+            let next_col = (snake_idx + 1) % self.width;
+            self.snake.body[0].0 = (row * self.width) + next_col;
         }
 
         if self.snake.direction == Direction::Left {
-            self.snake.body[0].0 = (snake_idx - 1) % self.size;
+            let next_col = (snake_idx - 1) % self.width;
+            self.snake.body[0].0 = (row * self.width) + next_col;
         }
     }
 }
