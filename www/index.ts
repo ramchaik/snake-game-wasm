@@ -7,7 +7,7 @@ const DIRECTION = {
   right: "ArrowRight",
 };
 
-init().then((_) => {
+init().then((wasm) => {
   const CELL_SIZE = 20;
   const WORLD_WIDTH = 8;
   const snakeSpawnIdx = Date.now() % (WORLD_WIDTH * WORLD_WIDTH);
@@ -83,6 +83,14 @@ init().then((_) => {
         break;
     }
   });
+
+  const snakePtr = world.snake_cells();
+  const snakeLen = world.snake_length();
+  const snakeCells = new Uint32Array(
+    wasm.memory.buffer,
+    snakePtr,
+    snakeLen,
+  );
 
   paint();
   update();
