@@ -34,13 +34,22 @@ init().then((wasm) => {
   }
 
   function drawSnake() {
-    const snakeIdx = world.snake_head_idx();
+    const snakeCells = new Uint32Array(
+      wasm.memory.buffer,
+      world.snake_cells(),
+      world.snake_length()
+    );
 
-    const col = snakeIdx % worldWidth;
-    const row = Math.floor(snakeIdx / worldWidth);
+    snakeCells.forEach((cellIdx, i) => {
+      const col = cellIdx % worldWidth;
+      const row = Math.floor(cellIdx / worldWidth);
 
-    ctx.beginPath();
-    ctx.fillRect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      ctx.fillStyle = i === 0 ? "#7878db" : "#000";
+
+      ctx.beginPath();
+      ctx.fillRect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+    });
+
     ctx.stroke();
   }
 
@@ -83,14 +92,6 @@ init().then((wasm) => {
         break;
     }
   });
-
-  const snakePtr = world.snake_cells();
-  const snakeLen = world.snake_length();
-  const snakeCells = new Uint32Array(
-    wasm.memory.buffer,
-    snakePtr,
-    snakeLen,
-  );
 
   paint();
   update();
