@@ -14,7 +14,7 @@ pub enum Direction {
 }
 
 #[wasm_bindgen]
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 pub struct SnakeCell(usize);
 
 struct Snake {
@@ -40,6 +40,7 @@ pub struct World {
     width: usize,
     size: usize,
     snake: Snake,
+    next_cell: Option<SnakeCell>,
 }
 
 #[wasm_bindgen]
@@ -49,6 +50,7 @@ impl World {
             width,
             size: width * width,
             snake: Snake::new(snake_index, 3),
+            next_cell: None,
         }
     }
 
@@ -63,10 +65,12 @@ impl World {
     pub fn change_snake_dir(&mut self, direction: Direction) {
         let next_cell = self.gen_next_snake_cell(&direction);
 
-        // Guard for invalid direction change 
+        // Guard for invalid direction change
         if self.snake.body[1].0 == next_cell.0 {
             return;
         }
+
+        self.next_cell = Some(next_cell);
 
         self.snake.direction = direction;
     }
@@ -128,8 +132,16 @@ impl World {
 
     pub fn step(&mut self) {
         let temp = self.snake.body.clone();
-        let next_cell = self.gen_next_snake_cell(&self.snake.direction);
-        self.snake.body[0] = next_cell;
+
+        match self.next_cell {
+            Some(cell) => {
+                self.snake.body[0] = cell;
+                self.next_cell = None;
+            }
+            None => {
+                self.snake.body[0] = self.gen_next_snake_cell(&self.snake.direction);
+            }
+        }
 
         let len = self.snake.body.len();
 
