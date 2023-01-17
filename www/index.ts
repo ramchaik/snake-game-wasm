@@ -20,6 +20,12 @@ init().then((wasm) => {
   canvas.height = worldWidth * CELL_SIZE;
   canvas.width = worldWidth * CELL_SIZE;
 
+  function getRowAndColumnForIndex(index: number) {
+    const col = index % worldWidth;
+    const row = Math.floor(index / worldWidth);
+    return [row, col];
+  }
+
   function drawWorld() {
     ctx.beginPath();
     for (let x = 0; x <= worldWidth; ++x) {
@@ -41,8 +47,7 @@ init().then((wasm) => {
     );
 
     snakeCells.forEach((cellIdx, i) => {
-      const col = cellIdx % worldWidth;
-      const row = Math.floor(cellIdx / worldWidth);
+      const [row, col] = getRowAndColumnForIndex(cellIdx);
 
       ctx.fillStyle = i === 0 ? "#7878db" : "#000";
 
@@ -53,9 +58,23 @@ init().then((wasm) => {
     ctx.stroke();
   }
 
+  function drawReward() {
+    const rewardIndex = world.reward_cell();
+
+    const [row, col] = getRowAndColumnForIndex(rewardIndex);
+
+    ctx.beginPath();
+
+    ctx.fillStyle = "#FF0000";
+    ctx.fillRect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+
+    ctx.stroke();
+  }
+
   function paint() {
     drawWorld();
     drawSnake();
+    drawReward();
   }
 
   function update() {
