@@ -180,7 +180,19 @@ impl World {
         // Consumer reward cell
         if self.reward_cell == self.snake_head_idx() {
             self.snake.body.push(SnakeCell(self.snake.body[1].0));
-            self.reward_cell = World::get_reward_cell(self.size, &self.snake.body);
+
+            // Handle Edge case for reward cell generation
+            if self.snake_length() < self.size {
+                // Game In progress
+                self.reward_cell = World::get_reward_cell(self.size, &self.snake.body);
+            } else {
+                // Winning Condition
+                // No cell left to generate reward cell
+
+                // for testing;
+                // some big value out of the grid
+                self.reward_cell = 1000;
+            }
         }
     }
 }
