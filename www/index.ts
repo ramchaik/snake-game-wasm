@@ -1,4 +1,5 @@
 import init, { World, Direction } from "snake-game-wasm";
+import {rnd} from './utils/rnd';
 
 const DIRECTION = {
   up: "ArrowUp",
@@ -10,7 +11,7 @@ const DIRECTION = {
 init().then((wasm) => {
   const CELL_SIZE = 20;
   const WORLD_WIDTH = 8;
-  const snakeSpawnIdx = Date.now() % (WORLD_WIDTH * WORLD_WIDTH);
+  const snakeSpawnIdx = rnd(WORLD_WIDTH * WORLD_WIDTH);
 
   const world = World.new(WORLD_WIDTH, snakeSpawnIdx);
   const canvas = <HTMLCanvasElement>document.getElementById("snake-canvas");

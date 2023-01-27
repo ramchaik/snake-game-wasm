@@ -5,9 +5,9 @@ use wee_alloc::WeeAlloc;
 static ALLOC: WeeAlloc = WeeAlloc::INIT;
 
 
-#[wasm_bindgen(module = "/www/utils/date.js")]
+#[wasm_bindgen(module = "/www/utils/rnd.ts")]
 extern {
-    fn now() -> usize;
+    fn rnd(max: usize) -> usize;
 }
 
 
@@ -55,7 +55,7 @@ pub struct World {
 impl World {
     pub fn new(width: usize, snake_index: usize) -> World {
         let size = width * width;
-        let reward_cell = now() % size;
+        let reward_cell = rnd(size);
 
         World {
             width,
