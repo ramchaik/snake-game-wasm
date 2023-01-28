@@ -1,5 +1,5 @@
 import init, { World, Direction } from "snake-game-wasm";
-import {rnd} from './utils/rnd';
+import { rnd } from "./utils/rnd";
 
 const DIRECTION = {
   up: "ArrowUp",
@@ -13,17 +13,24 @@ init().then((wasm) => {
   const WORLD_WIDTH = 8;
   const snakeSpawnIdx = rnd(WORLD_WIDTH * WORLD_WIDTH);
 
-
+  const gameControlBtn = document.getElementById("game-control-btn");
   const world = World.new(WORLD_WIDTH, snakeSpawnIdx);
   const canvas = <HTMLCanvasElement>document.getElementById("snake-canvas");
+
   const worldWidth = world.width();
   const ctx = canvas.getContext("2d");
 
-  const gameControlBtn = document.getElementById('game-control-btn');
-  gameControlBtn.addEventListener('click', _ => {
-    world.start_game();
-    play();
-  })
+  gameControlBtn.addEventListener("click", (_) => {
+    const gameStatus = world.game_status();
+    if (gameStatus === undefined) {
+      gameControlBtn.textContent = 'Playing...';
+      world.start_game();
+      play();
+    } else {
+      // reload page
+      location.reload();
+    }
+  });
 
   canvas.height = worldWidth * CELL_SIZE;
   canvas.width = worldWidth * CELL_SIZE;
