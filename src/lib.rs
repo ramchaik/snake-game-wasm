@@ -223,6 +223,7 @@ impl World {
                         // for testing;
                         // some big value out of the grid
                         self.reward_cell = 1000;
+                        self.status = Some(GameStatus::Won);
                     }
                 }
 
