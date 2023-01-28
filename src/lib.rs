@@ -88,6 +88,10 @@ impl World {
         reward_cell
     }
 
+    pub fn start_game(&mut self) {
+        self.status = Some(GameStatus::Played); 
+    }
+
     pub fn width(&self) -> usize {
         self.width
     }

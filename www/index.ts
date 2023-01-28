@@ -13,10 +13,17 @@ init().then((wasm) => {
   const WORLD_WIDTH = 8;
   const snakeSpawnIdx = rnd(WORLD_WIDTH * WORLD_WIDTH);
 
+
   const world = World.new(WORLD_WIDTH, snakeSpawnIdx);
   const canvas = <HTMLCanvasElement>document.getElementById("snake-canvas");
   const worldWidth = world.width();
   const ctx = canvas.getContext("2d");
+
+  const gameControlBtn = document.getElementById('game-control-btn');
+  gameControlBtn.addEventListener('click', _ => {
+    world.start_game();
+    play();
+  })
 
   canvas.height = worldWidth * CELL_SIZE;
   canvas.width = worldWidth * CELL_SIZE;
@@ -78,14 +85,14 @@ init().then((wasm) => {
     drawReward();
   }
 
-  function update() {
+  function play() {
     const fps = 10;
     setTimeout(() => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       world.step();
       paint();
       // callback invoked before the next repaint
-      requestAnimationFrame(update);
+      requestAnimationFrame(play);
     }, 1000 / fps);
   }
 
@@ -114,5 +121,4 @@ init().then((wasm) => {
   });
 
   paint();
-  update();
 });
