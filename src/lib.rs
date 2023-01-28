@@ -57,7 +57,7 @@ pub struct World {
     size: usize,
     snake: Snake,
     next_cell: Option<SnakeCell>,
-    reward_cell: usize,
+    reward_cell: Option<usize>,
     status: Option<GameStatus>,
 }
 
@@ -77,7 +77,7 @@ impl World {
         }
     }
 
-    fn get_reward_cell(max: usize, snake_body: &Vec<SnakeCell>) -> usize {
+    fn get_reward_cell(max: usize, snake_body: &Vec<SnakeCell>) -> Option<usize> {
         let mut reward_cell;
 
         // Avoid collision on reward cell and the snake body
@@ -86,7 +86,7 @@ impl World {
             if !snake_body.contains(&SnakeCell(reward_cell)) { break; }
         }
 
-        reward_cell
+        Some(reward_cell)
     }
 
     pub fn start_game(&mut self) {
@@ -114,7 +114,7 @@ impl World {
         self.snake.body[0].0
     }
 
-    pub fn reward_cell(&self) -> usize {
+    pub fn reward_cell(&self) -> Option<usize> {
         self.reward_cell
     }
 
@@ -212,7 +212,7 @@ impl World {
                 }
 
                 // Consumer reward cell
-                if self.reward_cell == self.snake_head_idx() {
+                if self.reward_cell == Some(self.snake_head_idx()) {
                     self.snake.body.push(SnakeCell(self.snake.body[1].0));
 
                     // Handle Edge case for reward cell generation
@@ -222,10 +222,7 @@ impl World {
                     } else {
                         // Winning Condition
                         // No cell left to generate reward cell
-
-                        // for testing;
-                        // some big value out of the grid
-                        self.reward_cell = 1000;
+                        self.reward_cell = None;
                         self.status = Some(GameStatus::Won);
                     }
                 }
