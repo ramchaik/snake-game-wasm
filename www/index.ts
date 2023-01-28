@@ -72,7 +72,7 @@ init().then((wasm) => {
       // Approach 2
       // Handle by reversing the body while rendering
       // NOTE: this head style cond will change to last elem with this approach
-      .slice() // make a copy to not do in-place changes that would break the wasm side (as the bits in memory is changes)
+      .slice() // make a copy to not do in-place changes that would break the wasm side (as the bits in memory is changed)
       .reverse()
       .forEach((cellIdx, i) => {
       const [row, col] = getRowAndColumnForIndex(cellIdx);
