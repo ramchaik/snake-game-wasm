@@ -97,6 +97,15 @@ impl World {
         self.status
     }
 
+    pub fn game_status_text(&self) -> String {
+        match self.status {
+            Some(GameStatus::Won) => String::from("You have won!"),
+            Some(GameStatus::Lost) => String::from("You have lost!"),
+            Some(GameStatus::Played) => String::from("Playing"),
+            None => String::from("No Status"),
+        }
+    }
+
     pub fn width(&self) -> usize {
         self.width
     }
