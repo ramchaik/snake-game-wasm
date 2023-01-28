@@ -1,4 +1,4 @@
-import init, { World, Direction } from "snake-game-wasm";
+import init, { World, Direction, GameStatus } from "snake-game-wasm";
 import { rnd } from "./utils/rnd";
 
 const DIRECTION = {
@@ -14,6 +14,7 @@ init().then((wasm) => {
   const snakeSpawnIdx = rnd(WORLD_WIDTH * WORLD_WIDTH);
 
   const gameControlBtn = document.getElementById("game-control-btn");
+  const points = document.getElementById("points");
   const gameStatus = document.getElementById("game-status");
   const world = World.new(WORLD_WIDTH, snakeSpawnIdx);
   const canvas = <HTMLCanvasElement>document.getElementById("snake-canvas");
@@ -90,6 +91,22 @@ init().then((wasm) => {
 
   function drawGameStatus() {
     gameStatus.textContent = world.game_status_text();
+    points.textContent = world.points().toString();
+  }
+
+  function hasGameEnded() {
+    const status = world.game_status();
+
+    // Game Ended
+    if (status === GameStatus.Won || status === GameStatus.Lost) {
+      // handle side effect 
+      gameControlBtn.textContent = 'Re-Play';
+
+      return true;
+    }
+
+    // Game being played
+    return false;
   }
 
   function drawReward() {
@@ -114,6 +131,12 @@ init().then((wasm) => {
 
   function play() {
     const fps = 4;
+
+    // break the play render loop if game has ended
+    if (hasGameEnded()) {
+      return;
+    }
+
     setTimeout(() => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       world.step();
