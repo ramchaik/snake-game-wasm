@@ -10,7 +10,7 @@ const DIRECTION = {
 
 init().then((wasm) => {
   const CELL_SIZE = 20;
-  const WORLD_WIDTH = 8;
+  const WORLD_WIDTH = 4;
   const snakeSpawnIdx = rnd(WORLD_WIDTH * WORLD_WIDTH);
 
   const gameControlBtn = document.getElementById("game-control-btn");
@@ -62,10 +62,24 @@ init().then((wasm) => {
       world.snake_length()
     );
 
-    snakeCells.forEach((cellIdx, i) => {
+    snakeCells
+      // Approach 1
+      // filter duplicate cell to render head on crash
+      // NOTE: this requires the head check to be done on 0th element
+      // .filter((cellIdx, i) => !(i > 0 && cellIdx === snakeCells[0]))
+
+      // Approach 2
+      // Handle by reversing the body while rendering
+      // NOTE: this head style cond will change to last elem with this approach
+      .slice() // make a copy to not do in-place changes that would break the wasm side (as the bits in memory is changes)
+      .reverse()
+      .forEach((cellIdx, i) => {
       const [row, col] = getRowAndColumnForIndex(cellIdx);
 
-      ctx.fillStyle = i === 0 ? "#7878db" : "#000";
+      // ctx.fillStyle = i === 0 ? "#7878db" : "#000";
+
+      // For reverse approach
+      ctx.fillStyle = i === snakeCells.length - 1 ? "#7878db" : "#000";
 
       ctx.beginPath();
       ctx.fillRect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
@@ -99,7 +113,7 @@ init().then((wasm) => {
   }
 
   function play() {
-    const fps = 10;
+    const fps = 4;
     setTimeout(() => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       world.step();
