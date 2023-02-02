@@ -10,7 +10,7 @@ const DIRECTION = {
 
 init().then((wasm) => {
   const CELL_SIZE = 20;
-  const WORLD_WIDTH = 4;
+  const WORLD_WIDTH = 8;
   const snakeSpawnIdx = rnd(WORLD_WIDTH * WORLD_WIDTH);
 
   const gameControlBtn = document.getElementById("game-control-btn");
