@@ -1,3 +1,3 @@
-export function rnd(max: number): number {
+export function rnd(max) {
     return Math.floor(Math.random() * max);
 }
