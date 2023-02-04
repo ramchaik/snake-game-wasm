@@ -1,5 +1,5 @@
 [package]
-name = "snake-game-wasm"
+name = "snake-game"
 version = "0.1.0"
 edition = "2021"
 
@@ -11,3 +11,6 @@ wee_alloc = "0.4.5"
 
 [lib]
 crate-type = ["cdylib"]
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false

@@ -1,4 +1,4 @@
-import init, { World, Direction, GameStatus } from "snake-game-wasm";
+import init, { World, Direction, GameStatus } from "snake-game";
 import { rnd } from "./utils/rnd";
 
 const DIRECTION = {

@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "copy-webpack-plugin": "^10.2.4",
-    "snake-game-wasm": "file:../pkg",
+    "snake-game": "file:../pkg",
     "ts-loader": "^9.3.0",
     "typescript": "^4.6.4",
     "webpack": "^5.70.0",
