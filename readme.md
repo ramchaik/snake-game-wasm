@@ -4,10 +4,14 @@ Browser based Snake Game made in Rust/WebAssembly and TS/JS.
 
 ### Packing Rust to WASM
 
-Install the `wasm-pack` crate and run the below command to pack the rust to WASM.
-
+Install the `wasm-pack` crate 
 ```sh
-wasm-pack build --target web
+cargo install wasm-pack
+```
+
+run the below command to pack the rust to WASM.
+```sh
+npm run pack:wasm
 ```
 
 ### Running Development Web Server Locally
